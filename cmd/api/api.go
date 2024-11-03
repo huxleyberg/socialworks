@@ -11,8 +11,11 @@ type config struct {
 }
 
 func (app *application) run() error {
+	mux := http.NewServeMux()
+
 	srv := &http.Server{
-		Addr: app.config.addr,
+		Addr:    app.config.addr,
+		Handler: mux,
 	}
 
 	return srv.ListenAndServe()
