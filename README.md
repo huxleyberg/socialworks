@@ -8,6 +8,7 @@ Building Social REST API Application with Go, PostgreSQL, Docker and Deploying t
    - **Optimization Techniques**: Use techniques to optimize both request processing and database interactions.
    - **Rate Limiting**: Apply rate-limiting strategies to manage API usage and protect your service.
    - **Authentication and Authorization**
+   - **Mocks and Unit Tests**
 
 2. **Deploy to the Cloud**: Deploy the completed API to a cloud provider, ensuring it is ready to scale and manage real-world traffic effectively.
 
