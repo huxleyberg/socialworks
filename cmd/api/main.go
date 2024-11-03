@@ -9,6 +9,6 @@ func main() {
 	app := &application{
 		config: cfg,
 	}
-
-	log.Fatal(app.run())
+	mux := app.routes()
+	log.Fatal(app.run(mux))
 }
