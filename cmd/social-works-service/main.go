@@ -11,6 +11,8 @@ import (
 func main() {
 	postgresDbUrl := os.Getenv("POSTGRES_DB_URL")
 	dbConn := db.ProvidePostgres(postgresDbUrl)
+	defer db.Close(dbConn)
+
 	a := app.New(dbConn)
 
 	mux := a.Handler()
