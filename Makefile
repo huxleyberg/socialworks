@@ -4,7 +4,7 @@ TEMPLATE = template.yaml
 VERSION = 0.1
 S3_BUCKET := $(S3_BUCKET)
 ZIPFILE = lambda.zip
-SERVICE_NAME = socialworks
+SERVICE_NAME = social-works-service
 MIGRATION_PATH=internal/db/migrations
 POSTGRES_DB_URL := $(POSTGRES_DB_URL)
 

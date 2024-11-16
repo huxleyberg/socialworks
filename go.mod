@@ -3,7 +3,7 @@ module github.com/huxleyberg/socialworks
 go 1.23.1
 
 require (
-	github.com/go-chi/chi/v5 v5.1.0
+	github.com/go-chi/chi v1.5.5
 	github.com/golang-migrate/migrate/v4 v4.18.1
 	github.com/lib/pq v1.10.9
 	github.com/pkg/errors v0.9.1

@@ -2,7 +2,6 @@ package db
 
 import (
 	"log"
-	"os"
 
 	"github.com/pkg/errors"
 	"gorm.io/driver/postgres"
@@ -11,13 +10,12 @@ import (
 )
 
 // ProvidePostgres returns a function that provides a Postgres client
-func ProvidePostgres() *gorm.DB {
-	postgresDbUrl := os.Getenv("POSTGRES_DB_URL")
+func ProvidePostgres(postgresDbUrl string) *gorm.DB {
 
 	// Connect to postgres
 	postgresProviderDB, err := gorm.Open(postgres.Open(postgresDbUrl), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
-			TablePrefix: "public.", // perform operations on the "public" schema
+			TablePrefix: "socialworks.", // perform operations on the "socialworks" schema
 		}})
 	if err != nil {
 		log.Fatal(errors.Wrap(err, "failed to connect to postgres"))
