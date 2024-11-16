@@ -11,7 +11,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-// //go:embed migrations
+//go:embed migrations
 var migrationFiles embed.FS
 
 // Migrate runs the migrations
