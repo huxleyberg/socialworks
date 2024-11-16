@@ -1,12 +1,13 @@
 OUTPUT = main/bootstrap
-PACKAGED_TEMPLATE = packaged.yaml 
+PACKAGED_TEMPLATE = packaged.yaml
 TEMPLATE = template.yaml
 VERSION = 0.1
 S3_BUCKET := $(S3_BUCKET)
 ZIPFILE = lambda.zip
 SERVICE_NAME = social-works-service
-MIGRATION_PATH=internal/db/migrations
+MIGRATION_PATH = internal/db/migrations
 POSTGRES_DB_URL := $(POSTGRES_DB_URL)
+DOCKER_COMPOSE_FILE = docker-compose.yml
 
 create-migration:
 	migrate create -ext sql -dir $(MIGRATION_PATH) -seq $(name)
@@ -34,32 +35,20 @@ clean:
 .PHONY: install
 install:
 	go get -t ./...
-	# go get -u honnef.co/go/tools/cmd/megacheck
-	go get -u golang.org/x/lint/golint
-
-local-install:
-	go get -u github.com/awslabs/aws-sam-local
 
 .PHONY: lint
 lint: install
-	# megacheck -go $(VERSION)
-	golint -set_exit_status
+	golint -set_exit_status ./...
 
 main:
 	go build -tags lambda.norpc -o $(OUTPUT) ./cmd/$(SERVICE_NAME)-lambda/main.go
 
-# compile the code to run in Lambda (local or real)
 .PHONY: lambda
 lambda:
 	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 $(MAKE) main
 
-# create a lambda deployment package
 $(ZIPFILE): clean lambda
 	zip -9 -r $(ZIPFILE) $(OUTPUT)
-
-.PHONY: run-local
-local-deploy: local-install
-	aws-sam-local local start-api
 
 .PHONY: build
 build: clean lambda
@@ -84,3 +73,40 @@ run: build-local
 	@echo ">> Running application ..."
 	POSTGRES_DB_URL=$(POSTGRES_DB_URL) \
 	./$(OUTPUT)
+
+### Docker Commands ###
+.PHONY: docker-build
+docker-build:
+	@echo ">> Building Docker image..."
+	docker build -t $(SERVICE_NAME):latest .
+
+.PHONY: docker-up
+docker-up:
+	@echo ">> Starting Docker containers..."
+	docker-compose -f $(DOCKER_COMPOSE_FILE) up -d
+
+.PHONY: docker-down
+docker-down:
+	@echo ">> Stopping Docker containers..."
+	docker-compose -f $(DOCKER_COMPOSE_FILE) down
+
+.PHONY: docker-clean
+docker-clean:
+	@echo ">> Removing Docker containers, images, and volumes..."
+	docker-compose -f $(DOCKER_COMPOSE_FILE) down -v
+	docker rmi $(SERVICE_NAME):latest || true
+
+.PHONY: docker-logs
+docker-logs:
+	@echo ">> Showing logs for Docker containers..."
+	docker-compose -f $(DOCKER_COMPOSE_FILE) logs -f
+
+.PHONY: migrate-up
+migrate-up:
+	@echo ">> Running migrations..."
+	migrate -path $(MIGRATION_PATH) -database $(POSTGRES_DB_URL) up
+
+.PHONY: migrate-down
+migrate-down:
+	@echo ">> Rolling back migrations..."
+	migrate -path $(MIGRATION_PATH) -database $(POSTGRES_DB_URL) down

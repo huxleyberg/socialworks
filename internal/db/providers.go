@@ -16,7 +16,7 @@ func ProvidePostgres(postgresDbUrl string) *gorm.DB {
 	// Connect to postgres
 	postgresProviderDB, err := gorm.Open(postgres.Open(postgresDbUrl), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
-			TablePrefix: "socialworks.", // perform operations on the "socialworks" schema
+			TablePrefix: "public.", // perform operations on the "public" schema
 		}})
 	if err != nil {
 		log.Fatal(errors.Wrap(err, "failed to connect to postgres"))
