@@ -12,4 +12,12 @@ type Post struct {
 	Tags      pq.StringArray `json:"tags" gorm:"type:text[]"`
 	CreatedAt string         `json:"created_at"`
 	UpdatedAt string         `json:"updated_at"`
+	Version   int            `json:"version"`
+	Comments  []Comment      `json:"comments"`
+	User      User           `json:"user"`
+}
+
+type PostWithMetadata struct {
+	Post
+	CommentsCount int `json:"comment_count"`
 }

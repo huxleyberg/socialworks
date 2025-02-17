@@ -2,9 +2,9 @@ package users
 
 import (
 	"context"
-	"errors"
 
 	"github.com/huxleyberg/socialworks/internal/models"
+	"github.com/huxleyberg/socialworks/pkg"
 	"gorm.io/gorm"
 )
 
@@ -25,7 +25,7 @@ func (u *UserRepository) GetByID(ctx context.Context, userID int64) (*models.Use
 	result := u.DB.WithContext(ctx).First(&user, userID)
 	if result.Error != nil {
 		if result.Error == gorm.ErrRecordNotFound {
-			return nil, errors.New("record not found")
+			return nil, pkg.ErrNotFound
 		}
 		return nil, result.Error
 	}
