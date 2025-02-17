@@ -1,6 +1,8 @@
 package models
 
 import (
+	"time"
+
 	"github.com/lib/pq"
 )
 
@@ -10,8 +12,8 @@ type Post struct {
 	Title     string         `json:"title"`
 	UserID    int64          `json:"user_id"`
 	Tags      pq.StringArray `json:"tags" gorm:"type:text[]"`
-	CreatedAt string         `json:"created_at"`
-	UpdatedAt string         `json:"updated_at"`
+	CreatedAt time.Time      `json:"created_at"`
+	UpdatedAt time.Time      `json:"updated_at"`
 	Version   int            `json:"version"`
 	Comments  []Comment      `json:"comments"`
 	User      User           `json:"user"`

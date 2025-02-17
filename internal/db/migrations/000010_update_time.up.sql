@@ -1,0 +1,15 @@
+-- Up Migration: Change column types to TIMESTAMPTZ with default NOW() in one line
+ALTER TABLE posts
+  ALTER COLUMN created_at SET DATA TYPE TIMESTAMPTZ, 
+  ALTER COLUMN updated_at SET DATA TYPE TIMESTAMPTZ,
+  ALTER COLUMN created_at SET DEFAULT NOW(), 
+  ALTER COLUMN updated_at SET DEFAULT NOW();
+
+ALTER TABLE comments
+  ALTER COLUMN created_at SET DATA TYPE TIMESTAMPTZ, 
+  ALTER COLUMN created_at SET DEFAULT NOW();
+
+ALTER TABLE followers
+  ALTER COLUMN created_at SET DATA TYPE TIMESTAMPTZ, 
+  ALTER COLUMN created_at SET DEFAULT NOW();
+
